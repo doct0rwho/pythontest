@@ -54,11 +54,11 @@ def check_combination(dice):
     if values == [6]:  
         return "Yahtzee", 8
     if values == [4, 2]:
-        return "4+2", 3.5
+        return "4+2", 3
     if values.count(2) == 3:
-        return "Three Pairs", 3
-    if 2 in values:
-        return "Pair", 1.15
+        return "Three Pairs", 2
+    if any(v >= 2 for v in values):
+        return "Pair", 0.9
     return None, 0
 
 def simulate_roll(bet):
