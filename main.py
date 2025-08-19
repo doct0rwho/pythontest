@@ -34,18 +34,22 @@ def get_balance():
     return result if result else 0
 
 # --- Перевірка комбінацій ---
+from collections import Counter
+
 def check_combination(dice):
-    counts = {x: dice.count(x) for x in set(dice)}
-    
-    if len(counts) == 1:  # всі однакові
+    counts = Counter(dice)
+    values = sorted(counts.values(), reverse=True)
+
+    if values == [6]:  # всі однакові
         return "Yahtzee", 10
-    if 4 in counts.values() and 2 in counts.values():
+    if values == [4, 2]:
         return "4+2", 2
-    if list(counts.values()).count(2) == 3:
+    if values.count(2) == 3:
         return "Three Pairs", 3
-    if 2 in counts.values():
+    if 2 in values:
         return "Pair", 1.5
     return None, 0
+
 
 # --- API endpoints ---
 @app.get("/balance")
