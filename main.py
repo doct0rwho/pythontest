@@ -98,18 +98,18 @@ def roll(data: RollRequest):
     bet = data.bet
     current_balance = get_balance()
     if bet > current_balance:
-        return {"error": "Not enough balance"}
+        raise HTTPException(status_code=400, detail="Not enough balance")
     if bet <= 0:
-        return {"error": "Bet must be > 0"}
+        raise HTTPException(status_code=400, detail="Bet must be > 0")
 
-    
+    # Знімаємо ставку
     c.execute("INSERT INTO transactions (value, type) VALUES (?, ?)", (-bet, "Bet"))
     conn.commit()
 
-   
+    # Генеруємо кубики (6 штук)
     dice = [random.randint(1, 6) for _ in range(6)]
 
-    
+    # Перевіряємо комбінацію
     combo, coef = check_combination(dice)
     win = 0
     if coef > 0:
